@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-xxl flex-grow-1 container-p-y bg-dark text-light">
+    <h3 class="text-center text-light mb-4">Listes des livres</h3>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ url('app_ajouter_livre') }}">
+            <button type="button" class="btn rounded-pill btn-success">Ajouter un livre</button>
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-dark table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom du livre</th>
+                    <th>Auteur</th>
+                    <th>Référence</th>
+                    <th>Ouvrage</th>
+                    <th>Année de publication</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for livre in livres %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ livre.nomLivre }}</td>
+                        <td>{{ livre.auteurLivre }}</td>
+                        <td>{{ livre.reference }}</td>
+                        <td>{{ livre.ouvrage }}</td>
+                        <td>{{ livre.getAnneePublication() | date('d-m-Y') }}</td>
+                        <td>
+                            <div class="d-flex">
+                                <a class="btn btn-warning rounded-pill me-2" href="{{ url('app_modifier_livre', {'id': livre.id}) }}">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <button class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#myModal{{ livre.id }}">
+                                    <i class="fas fa-trash-alt"></i> Supprimer
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal{{ livre.id }}" tabindex="-1" aria-labelledby="myModalLabel{{ livre.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content bg-dark text-light">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="myModalLabel{{ livre.id }}">Suppression d'un livre</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+
+                                            <!-- Modal Body -->
+                                            <div class="modal-body">
+                                                Cette action est irréversible !<br>
+                                                Voulez-vous vraiment supprimer ce livre ?
+                                            </div>
+
+                                            <!-- Modal Footer -->
+                                            <div class="modal-footer">
+                                                <a class="btn btn-danger rounded-pill" href="{{ url('app_supprimer_livre', {'id': livre.id}) }}">
+                                                    Confirmer
+                                                </a>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
